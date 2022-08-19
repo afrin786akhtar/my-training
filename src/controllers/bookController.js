@@ -3,13 +3,12 @@ const BookModel= require("../models/bookModel")
 
 const createBook= async function (req, res) {
     let data= req.body
-
     let savedData= await BookModel.create(data)
     res.send({msg: savedData})
 }
 
 const getBooksData= async function (req, res) {
-    let allBooks= await BookModel.find( {authorName : "HO" } )
+    let allBooks= await BookModel.find( {authorName : "J.K. rowlling" } )
     console.log(allBooks)
     if (allBooks.length > 0 )  res.send({msg: allBooks, condition: true})
     else res.send({msg: "No books found" , condition: false})
@@ -19,13 +18,14 @@ const getBooksData= async function (req, res) {
 const updateBooks= async function (req, res) {
     let data = req.body // {sales: "1200"}
     // let allBooks= await BookModel.updateMany( 
-    //     { author: "SK"} , //condition
+    //     { author: "RRR"} , //condition
     //     { $set: data } //update in data
     //  )
     let allBooks= await BookModel.findOneAndUpdate( 
-        { authorName: "ABC"} , //condition
+        { authorName: "kkrr"} , //condition
         { $set: data }, //update in data
-        { new: true , upsert: true} ,// new: true - will give you back the updated document // Upsert: it finds and updates the document but if the doc is not found(i.e it does not exist) then it creates a new document i.e UPdate Or inSERT  
+        { new: true , upsert: true} ,// new: true - will give you back the updated document 
+        // Upsert: it finds and updates the document but if the doc is not found(i.e it does not exist) then it creates a new document i.e UPdate Or inSERT  
      )
      
      res.send( { msg: allBooks})
