@@ -1,8 +1,5 @@
 const UserModel= require("../models/userModel")
 
-
-
-
 const basicCode= async function(req, res) {
     let tokenDataInHeaders= req.headers.token
     console.log(tokenDataInHeaders)
@@ -11,23 +8,6 @@ const basicCode= async function(req, res) {
     console.log( "hey man, congrats you have reached the Handler")
     res.send({ msg: "This is coming from controller (handler)"})
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 const createUser= async function (req, res) {
@@ -41,6 +21,15 @@ const getUsersData= async function (req, res) {
     res.send({msg: allUsers})
 }
 
+//--------------------------------Assignment------------------------
+
+const assignment = async function(req , res) {
+    console.log("This is my 1st middleware assignment")
+    res.send({msg : "Done today's work "})
+}
+
+
 module.exports.createUser= createUser
 module.exports.getUsersData= getUsersData
 module.exports.basicCode= basicCode
+module.exports.assignment=assignment
