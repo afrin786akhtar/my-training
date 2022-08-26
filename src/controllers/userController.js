@@ -13,6 +13,7 @@ const createUser = async function (abcd, xyz) {
   console.log(abcd.newAtribute);
   xyz.send({ msg: savedData });
 };
+//---------------------------------LOG-IN--------------------------------------
 
 const loginUser = async function (req, res) {
   let userName = req.body.emailId;
@@ -24,6 +25,8 @@ const loginUser = async function (req, res) {
       status: false,
       msg: "username or the password is not corerct",
     });
+    
+// --------------------------------TOKEN----------------------------------------------
 
   // Once the login is successful, create the jwt token with sign function
   // Sign function has 2 inputs:
@@ -31,10 +34,11 @@ const loginUser = async function (req, res) {
   // The decision about what data to put in token depends on the business requirement
   // Input 2 is the secret (This is basically a fixed value only set at the server. This value should be hard to guess)
   // The same secret will be used to decode tokens 
+  
   let token = jwt.sign(
     {
       userId: user._id.toString(),
-      batch: "thorium",
+      batch: "plutonium",
       organisation: "FunctionUp",
     },
     "functionup-plutonium-very-very-secret-key"
@@ -42,6 +46,8 @@ const loginUser = async function (req, res) {
   res.setHeader("x-auth-token", token);
   res.send({ status: true, token: token });
 };
+
+// --------------------------GET-USER-DATA-----------------------------------------
 
 const getUserData = async function (req, res) {
   let token = req.headers["x-Auth-token"];
@@ -74,6 +80,8 @@ const getUserData = async function (req, res) {
   // Note: Try to see what happens if we change the secret while decoding the token
 };
 
+// --------------------------------UPDATE USER-----------------------------------------
+
 const updateUser = async function (req, res) {
   // Do the same steps here:
   // Check if the token is present
@@ -82,6 +90,7 @@ const updateUser = async function (req, res) {
 
   let userId = req.params.userId;
   let user = await userModel.findById(userId);
+
   //Return an error if no user with the given id exists in the db
   if (!user) {
     return res.send("No such user exists");
