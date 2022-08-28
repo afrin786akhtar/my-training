@@ -13,6 +13,7 @@ const createUser = async function (abcd, xyz) {
   console.log(abcd.newAtribute);
   xyz.send({ msg: savedData });
 };
+
 //---------------------------------LOG-IN--------------------------------------
 
 const loginUser = async function (req, res) {
@@ -100,6 +101,7 @@ const updateUser = async function (req, res) {
   let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
   res.send({ status: updatedUser, data: updatedUser });
 };
+
 
 module.exports.createUser = createUser;
 module.exports.getUserData = getUserData;
