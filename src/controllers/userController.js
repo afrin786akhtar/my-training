@@ -108,6 +108,25 @@ const postMessage = async function (req, res) {
     
     let updatedPosts = user.posts
     //add the message to user's posts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     updatedPosts.push(message)
     let updatedUser = await userModel.findOneAndUpdate({_id: user._id},{posts: updatedPosts}, {new: true})
 
