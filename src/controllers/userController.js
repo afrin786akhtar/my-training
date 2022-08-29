@@ -113,11 +113,11 @@ const deleteUser = async function(req , res){
     }
     let newData = user.isDeleted.toString() 
 
-    if(newData == false){
+    if(newData == "false"){
         return res.send("Can not delete")
     }else{  
         let updatedUser = await userModel.findByIdAndUpdate({_id : userId})
-        res.send({status : true , msg : "details are deleted"})
+        res.send({status : true , msg : updatedUser})
     }
 
 }

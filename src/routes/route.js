@@ -21,4 +21,4 @@ router.put("/users/:userId",commonMids.Auth , userController.updateUser)
 
 router.delete("/users/:userId" ,commonMids.Auth ,  userController.deleteUser)
 
-module.exports = router;  
+module.exports = router;     
