@@ -23,9 +23,9 @@ const loginUser = async function (req, res) {
   let user = await userModel.findOne({ emailId: userName, password: password });
   if (!user)
     return res.send({
-      status: false,
+      status: false,  
       msg: "username or the password is not corerct",
-    });
+    });  
     
 // --------------------------------TOKEN----------------------------------------------
 
@@ -51,14 +51,14 @@ const loginUser = async function (req, res) {
 // --------------------------GET-USER-DATA-----------------------------------------
 
 const getUserData = async function (req, res) {
-  let token = req.headers["x-Auth-token"];
-  if (!token) token = req.headers["x-auth-token"];
-
-  //If no token is present in the request header return error. This means the user is not logged in.
-  if (!token) return res.send({ status: false, msg: "token must be present" });
-
-  console.log(token);
-
+ 
+    let token = req.headers["x-Auth-token"];
+    if (!token) token = req.headers["x-auth-token"];
+  
+    //If no token is present in the request header return error. This means the user is not logged in.
+    if (!token) return res.send({ status: false, msg: "token must be present" });
+  
+    console.log(token);
   // If a token is present then decode the token with verify function
   // verify takes two inputs:
   // Input 1 is the token to be decoded
@@ -74,7 +74,7 @@ const getUserData = async function (req, res) {
 
   let userId = req.params.userId;
   let userDetails = await userModel.findById(userId);
-  if (!userDetails)
+  if (!userDetails)   
     return res.send({ status: false, msg: "No such user exists" });
 
   res.send({ status: true, data: userDetails });
@@ -99,11 +99,31 @@ const updateUser = async function (req, res) {
 
   let userData = req.body;
   let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
-  res.send({ status: updatedUser, data: updatedUser });
+  res.send({ status: true, data: updatedUser });
 };
 
+// --------------------------------DELETED USER------------------------------
+
+const deleteUser = async function(req , res){
+    let userId = req.params.userId
+    let user = await userModel.findById(userId)
+
+    if(!user){
+        return res.send("doesn't exist")
+    }
+    let newData = user.isDeleted.toString() 
+
+    if(newData == false){
+        return res.send("Can not delete")
+    }else{  
+        let updatedUser = await userModel.findByIdAndUpdate({_id : userId})
+        res.send({status : true , msg : "details are deleted"})
+    }
+
+}
 
 module.exports.createUser = createUser;
 module.exports.getUserData = getUserData;
 module.exports.updateUser = updateUser;
 module.exports.loginUser = loginUser;
+module.exports.deleteUser = deleteUser
