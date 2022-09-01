@@ -2,27 +2,31 @@ const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
 const authenticate = function(req, res, next) {
-       
-  //check if token is present
-  //check if the token is valid
-//    console.log(req.headers)
-  let token = req.headers['x-auth-token']
+  try{
+     
+    let token = req.headers['x-auth-token']
 
-  console.log(token)
+    console.log(token)
 
-  if(!token) return res.send({status : false , msg : "token is not present"})
+    if(!token) return res.send({status : false , msg : "token is not present"})
 
-  let decodedToken = jwt.verify(token , 'functionup-plutonium-very-very-secret-key')
+    let decodedToken = jwt.verify(token , 'functionup-plutonium-very-very-secret-key')
 
-  if(!decodedToken) return res.send({status : false , msg : "token is not valid"})
+    if(!decodedToken) return res.send({status : false , msg : "token is not valid"})
 
     next();
+  }catch(err){
+    console.log("There is an error : " , err.message)
+    res.status(500).send({msg : "SERVER ERROR ", error : err.message})
+   }
+  
     
 }   
 
 const authorise = function(req, res, next) {
-    // comapre the logged in user's id and the id in request
-
+    
+  try{
+    
   let token = req.headers['x-auth-token']
 
   if(!token) return res.send({status : false , msg : "token is not present"})
@@ -38,10 +42,16 @@ const authorise = function(req, res, next) {
 
   //checking if the logged-in user has only posted not others are allowed
 
-  if(userToBeModified !=  userLoggedIn) return res.send({status : false , msg : "user not exist"})
+  if(userToBeModified !=  userLoggedIn) return res.status(404).send({status : false , msg : "user not found"})
 
     next()
+  }catch(err){
+    console.log("There is an error : " , err.message)
+    res.status(500).send({msg : "SERVER ERROR ", error : err.message})
+   }
+
 }
 
 module.exports.authenticate = authenticate
 module.exports.authorise = authorise
+// module.exports.token = token
