@@ -49,11 +49,11 @@ let getByPin = async function (req, res) {
         }
         let result = await axios(options)
         console.log(result.data)
-        res.status(200).send({ msg: result.data })
+        res.status(200).send({msg: result.data })
     }
     catch (err) {
         console.log(err)
-        res.status(500).send({ msg: err.message })
+        res.status(500).send({  data : "SERVER ERROR", msg: err.message })
     }
 }
 
@@ -78,8 +78,59 @@ let getOtp = async function (req, res) {
     }
 }
 
+//--------------------------------------------ASSIGNMENT-1 ----------------------------
+
+// let sessionsByDistricId = async function (req , res) {
+//     try {
+    
+//         let district = req.query.district_id
+//         let date = req.query.date
+//         let options = {
+//             method : "get",
+//             url : `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${district}&date=${date}`
+//         }
+//         let result = await axios(options)
+//         console.log(result.data)
+        
+//         res.status(200).send({msg : result , status :true})
+//     } catch (error) {
+        
+//     }
+// }
+ 
+let getDistrictSessions = async function (req, res) {
+    try {
+        
+        // let data = req.body
+       let district = req.query.district_Id
+
+       console.log(district)
+
+       let date = req.query.date
+
+       console.log(date)
+
+       var options = {
+           method:"get",
+           url:`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${district}&date=${date}`
+         
+       }
+        let result = await axios(options)
+       console.log(result)
+       
+       res.status(200).send({ msg : result.data })
+   }
+    catch (err) {
+       console.log(err)
+       res.status(500).send({ msg:err.message })
+       
+   }
+}
+
 
 module.exports.getStates = getStates
 module.exports.getDistricts = getDistricts
 module.exports.getByPin = getByPin
 module.exports.getOtp = getOtp
+// module.exports.sessionsByDistricId = sessionsByDistricId
+module.exports.getDistrictSessions = getDistrictSessions
