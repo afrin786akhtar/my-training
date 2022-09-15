@@ -1,12 +1,16 @@
 const CollegeModel = require('../models/CollegeModel');
 const InternModel = require('../models/InternModel')
 
+//----------------------validation-------------------------
+
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false;
     if (typeof value === "string" && value.trim().length === 0) return false;
     if (typeof value === "object" && Object.keys(value).length === 0) return false;
     return true;
 };
+
+//---------------------creating-interns------------------
 
 const createIntern = async function (req, res) {
     try {
@@ -36,29 +40,29 @@ const createIntern = async function (req, res) {
             return res.status(400).send({ status: false, msg: "Please provide Mobile Number. it's mandatory" })
         }
         if (!mobileValid.test(data.mobile)) {
-            return res.status(400).send({ status: false, msg: "please provide valid mobile Number" })
+            return res.status(400).send({ status: false, msg: "Please provide valid mobile Number of 10-digit" })
         }
         let studentemail = await InternModel.findOne({ email: data.email })
         if (studentemail) {
             if (studentemail.email) {
-                return res.status(400).send({ status: false, msg: "this email is already exist" })
+                return res.status(400).send({ status: false, msg: "This email is already exist" })
             }
         }
         let studentdmobile = await InternModel.findOne({ mobile: data.mobile })
         if (studentdmobile) {
             if (studentdmobile.mobile) {
-                return res.status(400).send({ status: false, msg: "this mobile Number is already exist" })
+                return res.status(400).send({ status: false, msg: "This mobile Number is already exist" })
             }
         }
         if (!isValid(data.collegeName)) {
-            return res.status(400).send({ status: false, msg: "please provide college Name" })
+            return res.status(400).send({ status: false, msg: "Please provide college Name" })
         }else{
             data.collegeName = data.collegeName.trim()
         }
         
         const colleges = await CollegeModel.findOne({ name: data.collegeName })
         if (!colleges) {
-            return res.status(400).send({ status: false, msg: "this college is not available" })
+            return res.status(400).send({ status: false, msg: "This college is not available in the list" })
         } else {
             data.collegeId = colleges._id.toString()
         }
@@ -70,5 +74,5 @@ const createIntern = async function (req, res) {
         res.status(500).send({ status: false, error: err.message })
     }
 }
-
+ 
 module.exports.createIntern = createIntern
