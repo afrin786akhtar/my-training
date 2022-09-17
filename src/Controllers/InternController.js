@@ -40,7 +40,7 @@ const createIntern = async function (req, res) {
             return res.status(400).send({ status: false, msg: "Please provide Mobile Number. it's mandatory" })
         }
         if (!mobileValid.test(data.mobile)) {
-            return res.status(400).send({ status: false, msg: "Please provide valid mobile Number of 10-digit" })
+            return res.status(400).send({ status: false, msg: "please provide valid mobile Number 10-digit" })
         }
         let studentemail = await InternModel.findOne({ email: data.email })
         if (studentemail) {
@@ -66,10 +66,11 @@ const createIntern = async function (req, res) {
         } else {
             data.collegeId = colleges._id.toString()
         }
-        const { name, email, mobile, collegeId } = data
 
-        let savedata = await InternModel.create({ name, email, mobile, collegeId })
-        res.status(201).send({ status: true, data: savedata })
+        let savedata = await InternModel.create(data)
+        const { name, email, mobile, collegeId } = savedata
+
+        res.status(201).send({ status: true, data:{ name, email, mobile, collegeId } })
     } catch (err) {
         res.status(500).send({ status: false, error: err.message })
     }
