@@ -23,10 +23,10 @@ const blogSchema = new mongoose.Schema(
             required: true
         },
         subcategory: {
-            type: [ String]
+            type: [String]
         },
 
-        deletedAt: {
+        deletedAt: { //date the blog is been deleted
             type: Date
         },
         isPublished: {

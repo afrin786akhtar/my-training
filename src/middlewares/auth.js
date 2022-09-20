@@ -32,7 +32,7 @@ const authorise = async function (req, res, next) {
         if (blogId.length == 24) {
 
             let data = await blogModel.findById(blogId)    //search doc with that given blogId
-            if (data == null) return res.status(403).send({  status: false,msg: "No blog available with this BlogId" })
+            if (data == null) return res.status(403).send({ status: false, msg: "No blog available with this BlogId" })
             let loggedInAuthor = data.authorId.toString()  //person who want to access to resource
             let priviledgedAuthor = req.headers.authorId   //person who is loggedIn (has token)
 
@@ -53,7 +53,7 @@ const authoriseforDelete = async function (req, res, next) {
         let data = req.query
 
         // length of data object must be grater than Zero
-        if (Object.keys(data).length == 0) return res.status(400).send({ status: false, msg: "Please enter the filter for deletion" })
+        if (Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "Please enter the filter for deletion" })
 
         //destructure the array of variable of data
         const { category, authorId, tags, subcategory, isPublished } = data
@@ -64,18 +64,18 @@ const authoriseforDelete = async function (req, res, next) {
         if (isPublished) { mainData.isPublished = isPublished }
         if (authorId) {
             let isValid = mongoose.Types.ObjectId.isValid(authorId)
-            if (isValid == false) return res.send({ msg: "Invalid length of authorId" })
+            if (isValid == false) return res.send({ message: "Invalid length of authorId" })
             mainData.authorId = authorId
         }
 
         // must be assign at least one items in the main data
-        if (Object.keys(mainData).length == 0) return res.status(404).send({ status: false, msg: "please enter the valid keys" })
+        if (Object.keys(mainData).length == 0) return res.status(404).send({ status: false, message: "please enter the valid keys" })
 
         mainData.isDeleted = false
         mainData.isPublished = true
 
         let result = await blogModel.findOne(mainData)
-        if (result == null) return res.status(404).send({ status: false, msg: "No data found to be deleted" })
+        if (result == null) return res.status(404).send({ status: false, message: "No data found to be deleted" })
 
         next()
 
@@ -84,6 +84,7 @@ const authoriseforDelete = async function (req, res, next) {
         res.status(500).send({ msg: error.message })
     }
 }
+
 module.exports.authenticate = authenticate
 module.exports.authorise = authorise
 module.exports.authoriseforDelete = authoriseforDelete

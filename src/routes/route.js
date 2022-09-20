@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const authorController=require('../controllers/authorController')
+const authorController = require('../controllers/authorController')
 const blogController = require('../controllers/blogController')
 const auth = require('../middlewares/auth')
 const validators = require('../validators/validator')
+const blogModel = require('../model/blogModel')
 
 
 // dummy 
@@ -13,7 +14,7 @@ router.get("/test-me", function (req, res) {
 
 //-------------------create author--------------------------------------------
 
-router.post('/authors',validators.authorValidator,authorController.createAuthor)
+router.post('/authors', validators.authorValidator, authorController.createAuthor)
 
 
 // -------------------- login -------------------------------------------------
@@ -23,28 +24,32 @@ router.post("/login", authorController.login)
 
 //-------------------create blog----------------------------------------------
 
-router.post('/blogs',auth.authenticate, validators.blogValidator, blogController.createBlog)
+router.post('/blogs', auth.authenticate, validators.blogValidator, blogController.createBlog)
 
 //----------------------get-blog----------------------------------------------
 
-router.get('/blogs',auth.authenticate, blogController.getBlog)
+router.get('/blogs', auth.authenticate, blogController.getBlog)
 
 // ------------------- update blog -------------------------------------------
 
-router.put('/blogs/:blogId',auth.authenticate, auth.authorise, blogController.getUpdated)
+router.put('/blogs/:blogId', auth.authenticate, auth.authorise, blogController.getUpdated)
 
 
 //--------------------Delete-Blog----------------------------------------------
 
-router.delete('/blogs/:blogId' ,auth.authenticate, auth.authorise,blogController.deleteBlog)
+router.delete('/blogs/:blogId', auth.authenticate, auth.authorise, blogController.deleteBlog)
 
 
 //----------------- blogDelete based on category, authorid, tag name, subcategory name, unpublished ------------
 
-router.delete('/blogs', auth.authoriseforDelete, blogController.deleteByQuery)
+router.delete('/blogs', auth.authenticate, auth.authoriseforDelete, blogController.deleteByQuery)
 
 
 
+router.post("/blog", async function (req, res) {
+    let forupdate = await blogModel.updateMany({ isDeleted: true }, { isDeleted: false })
+    res.send(forupdate)
+})
 
 
 module.exports = router
