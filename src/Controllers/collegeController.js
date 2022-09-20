@@ -14,6 +14,7 @@ const isValid = function (value) {
 
 const createCollege = async function (req, res) {
     try {
+        res.setHeader( 'Access-Control-Allow-Origin' , '*')
         let data = req.body
         let validurl= /\b(https?|ftp|file):\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|]/
         if (!isValid(data)) {
@@ -23,7 +24,7 @@ const createCollege = async function (req, res) {
             return res.status(400).send({ status: false, msg: "Please provide name. it's mandatory" })
         } else {
             data.name = data.name.trim().split(" ").filter(word => word).join(" ")
-        }
+        } 
         let college = await collegeModel.findOne({ name: data.name })
         if (college) {
             return res.status(409).send({ status: false, msg: "This college name is already reserved, please provide different college name" })
@@ -42,6 +43,7 @@ const createCollege = async function (req, res) {
         let savedata = await collegeModel.create(data)
 
         const {name,fullName,logoLink,isDeleted} = savedata
+
         return res.status(201).send({ status: true, data: {name,fullName,logoLink,isDeleted} })
     } catch (err) {
         return res.status(500).send({ status: false, error: err.message })
@@ -52,6 +54,7 @@ const createCollege = async function (req, res) {
 
 const getcollegeDetails = async function (req, res) {
     try {
+        res.setHeader( 'Access-Control-Allow-Origin' , '*')
         let collegeName = req.query.collegeName
         if (!collegeName) {
             return res.status(400).send({ status: false, msg: "Please Enter college name" })

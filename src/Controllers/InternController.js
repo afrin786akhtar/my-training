@@ -10,10 +10,11 @@ const isValid = function (value) {
     return true;
 };
 
-//---------------------creating-interns------------------
+//---------------------creating-interns----------------------
 
 const createIntern = async function (req, res) {
     try {
+       res.setHeader( 'Access-Control-Allow-Origin' , '*')
         let data = req.body;
         let alphabets = /^[A-Z][A-Z a-z]{3,20}$/
         let emailValid = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
@@ -26,7 +27,7 @@ const createIntern = async function (req, res) {
             return res.status(400).send({ status: false, msg: "Please provide name. it's mandatory" })
         } else {
             data.name = data.name.trim().split(" ").filter(word => word).join(" ")
-        }
+        } 
         if (!alphabets.test(data.name)) {
             return res.status(400).send({ status: false, msg: "name must contain only letters and first letter is capital" })
         }
@@ -66,6 +67,8 @@ const createIntern = async function (req, res) {
         } else {
             data.collegeId = colleges._id.toString()
         }
+
+        // console.log(data)
 
         let savedata = await InternModel.create(data)
         const { name, email, mobile, collegeId } = savedata
